@@ -1,17 +1,34 @@
-class PostServlet < WEBrick::HTTPServlet::AbstractServlet
+require_relative '../base_servlet'
+
+class PostServlet < BaseServlet
   def do_POST(request, response)
-    parse_request(request)
-    create_response(response)
+    @request  = request
+    @response = response
+    @headers  = headers_from request
+    @body     = body_from    request
+
+    post_logic
   end
 
   private
 
-  def parse_request(request)
-
+  def post_logic
+    add_to_file if correct_headers?
   end
 
-  def create_response(response)
-    response.body = "Hi from POST\n"
-    response
+  def add_to_file
+    full_path = "#{ROOT_PATH}#{@headers[:path]}"
+    begin
+      File.open(full_path, 'ab') do |file|
+        file.puts(@body)
+      end
+    rescue
+      create_response
+    end
+  end
+
+  def create_response
+    @response.body = "ERROR! Uncorrect path!"
+    @response
   end
 end
