@@ -2,10 +2,7 @@ require_relative '../base_servlet'
 
 class PostServlet < BaseServlet
   def do_POST(request, response)
-    @request  = request
-    @response = response
-    @headers  = headers_from request
-    @body     = body_from    request
+    init_vars(request, response)
 
     post_logic
   end
@@ -13,22 +10,28 @@ class PostServlet < BaseServlet
   private
 
   def post_logic
-    add_to_file if correct_headers?
+    correct_headers?(REQUIRED_POST_HEADERS) ? add_to_file : create_failure_response
   end
 
   def add_to_file
-    full_path = "#{ROOT_PATH}#{@headers[:path]}"
+    path = full_path(@headers[:path])
     begin
-      File.open(full_path, 'ab') do |file|
+      File.open(path, 'ab') do |file|
         file.puts(@body)
       end
-    rescue
       create_response
+    rescue
+      create_failure_response
     end
   end
 
   def create_response
-    @response.body = "ERROR! Uncorrect path!"
+    @response.body = "SUCCESS!"
+    @response
+  end
+
+  def create_failure_response
+    @response.body = "FAILURE!"
     @response
   end
 end

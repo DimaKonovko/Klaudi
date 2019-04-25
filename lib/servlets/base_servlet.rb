@@ -1,6 +1,14 @@
 class BaseServlet < WEBrick::HTTPServlet::AbstractServlet
   ROOT_PATH = "#{File.absolute_path('.', '../public')}/"
   REQUIRED_POST_HEADERS = %w(path)
+  REQUIRED_GET_HEADERS  = %w(path)
+
+  def init_vars(request, response)
+    @request  = request
+    @response = response
+    @headers  = headers_from(request)
+    @body     = body_from(request)
+  end
 
   def headers_from(request)
     hash = {}
@@ -15,9 +23,12 @@ class BaseServlet < WEBrick::HTTPServlet::AbstractServlet
     request.body
   end
 
-  def correct_headers?
+  def correct_headers?(required_headers)
     headers = @headers.keys.map { |key| key.to_s }
-    (headers & REQUIRED_POST_HEADERS).count == REQUIRED_POST_HEADERS.count
+    (headers & required_headers).count == required_headers.count
   end
 
+  def full_path(path)
+    "#{ROOT_PATH}#{path}"
+  end
 end
