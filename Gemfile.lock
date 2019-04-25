@@ -1,12 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    fileutils (1.0.2)
     webrick (1.4.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  fileutils
   webrick
 
 BUNDLED WITH
