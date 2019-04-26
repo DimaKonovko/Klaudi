@@ -1,17 +1,26 @@
-class DeleteServlet < WEBrick::HTTPServlet::AbstractServlet
+require_relative '../base_servlet'
+
+class DeleteServlet < BaseServlet
   def do_DELETE(request, response)
-    parse_request(request)
-    create_response(response)
+    init_vars(request, response)
+
+    delete_logic
   end
 
   private
 
-  def parse_request(request)
-
+  def delete_logic
+    required_headers?(DELETE_HEADERS) ? create_response : create_failure_response
   end
 
-  def create_response(response)
-    response.body = "Hi from DELETE\n"
-    response
+  def create_response
+    path = full_path(@headers[:path])
+    if File.file?(path)
+      File.delete(path)
+      create_response
+    else
+      create_failure_response
+    end
+    @response
   end
 end

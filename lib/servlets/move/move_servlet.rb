@@ -1,17 +1,30 @@
-class MoveServlet < WEBrick::HTTPServlet::AbstractServlet
+require_relative '../base_servlet'
+
+class MoveServlet < BaseServlet
   def do_MOVE(request, response)
-    parse_request(request)
-    create_response(response)
+    init_vars(request, response)
+
+    move_logic
   end
 
   private
 
-  def parse_request(request)
-
+  def move_logic
+    if required_headers?(MOVE_HEADERS)
+      from = full_path(@headers[:from])
+      to   = full_path(@headers[:to])
+      if all_correct?(from, to)
+        FileUtils.move(from, to)
+        create_response
+      else
+        create_failure_response
+      end
+    else
+      create_failure_response
+    end
   end
 
-  def create_response(response)
-    response.body = "Hi from MOVE\n"
-    response
+  def all_correct?(from, to)
+    from != to && File.file?(from) && File.exist?(File.dirname(to)) && !@headers[:to].nil?
   end
 end

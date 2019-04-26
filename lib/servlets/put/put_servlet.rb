@@ -1,17 +1,27 @@
-class PutServlet < WEBrick::HTTPServlet::AbstractServlet
+require_relative '../base_servlet'
+
+class PutServlet < BaseServlet
   def do_PUT(request, response)
-    parse_request(request)
-    create_response(response)
+    init_vars(request, response)
+
+    put_logic
   end
 
   private
 
-  def parse_request(request)
-
+  def put_logic
+    required_headers?(PUT_HEADERS) ? add_to_file : create_failure_response
   end
 
-  def create_response(response)
-    response.body = "Hi from PUT\n"
-    response
+  def add_to_file
+    path = full_path(@headers[:path])
+    begin
+      File.open(path, 'w') do |file|
+        file.puts(@body)
+      end
+      create_response
+    rescue
+      create_failure_response
+    end
   end
 end
