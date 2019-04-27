@@ -15,12 +15,12 @@ class PostServlet < BaseServlet
 
   def add_to_file
     path = full_path(@headers[:path])
-    if File.file?(path)
-      File.open(path, 'a') do |file|
+    begin
+      File.open(path, 'ab') do |file|
         file.puts(@body)
       end
       create_response
-    else
+    rescue
       create_failure_response
     end
   end
