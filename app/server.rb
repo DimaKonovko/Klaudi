@@ -7,16 +7,15 @@ require_relative 'servlets/copy/copy_servlet'
 require_relative 'servlets/move/move_servlet'
 
 servlets = {
-  '/get'    => GetServlet,
-  '/post'   => PostServlet,
-  '/put'    => PutServlet,
-  '/delete' => DeleteServlet,
-  '/copy'   => CopyServlet,
-  '/move'   => MoveServlet
+  '/get'      => GetServlet,
+  '/register' => PostServlet,
+  '/put'      => PutServlet,
+  '/delete'   => DeleteServlet,
+  '/copy'     => CopyServlet,
+  '/move'     => MoveServlet
 }
 
 config = {
-  DocumentRoot: '../public',
   Port: 8080
 }
 
