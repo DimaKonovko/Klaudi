@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
 
 gem 'webrick'
-gem 'fileutils'
+gem 'pg'
+gem 'mechanize'
