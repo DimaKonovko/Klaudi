@@ -22,14 +22,13 @@ GEM
     net-http-digest_auth (1.4.1)
     net-http-persistent (3.0.0)
       connection_pool (~> 2.2)
-    nokogiri (1.10.3)
+    nokogiri (1.10.5)
       mini_portile2 (~> 2.4.0)
     ntlm-http (0.1.1)
     pg (1.1.4)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
-    pg (1.1.4)
     webrick (1.4.2)
     webrobots (0.1.2)
 
